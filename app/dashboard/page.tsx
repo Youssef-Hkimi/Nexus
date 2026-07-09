@@ -8,15 +8,23 @@ import {
   Server,
   UserRound,
 } from "lucide-react";
+import { useRouter } from "next/navigation";
 
 import { ActivityFeed } from "@/components/dashboard/activity-feed";
 import { DashboardNav } from "@/components/dashboard/dashboard-sidebar";
 import { ListingsTable } from "@/components/dashboard/listings-table";
 import { PerformanceChart } from "@/components/dashboard/performance-chart";
 import { StatsGrid } from "@/components/dashboard/stats-grid";
-import { LinkButton } from "@/components/ui/link-button";
+import { useAuth } from "@/lib/auth/auth-context";
 
 export default function DashboardPage() {
+  const router = useRouter();
+  const { user, requireAuth } = useAuth();
+
+  function goCreate() {
+    requireAuth(() => router.push("/dashboard/new"));
+  }
+
   return (
     <div className="space-y-8">
       <div className="lg:hidden">
@@ -26,16 +34,16 @@ export default function DashboardPage() {
       <div className="flex flex-col gap-4 sm:flex-row sm:items-end sm:justify-between">
         <div>
           <h1 className="text-3xl font-bold tracking-tight text-foreground">
-            Welcome back, Alex
+            Welcome back, {user?.username ?? "Alex"}
           </h1>
           <p className="mt-1 text-muted">
             Manage your servers, bots, and community growth.
           </p>
         </div>
-        <LinkButton href="/dashboard/new">
+        <Button onPress={goCreate}>
           <Plus className="size-4" />
           Create New Listing
-        </LinkButton>
+        </Button>
       </div>
 
       <StatsGrid />
@@ -53,22 +61,28 @@ export default function DashboardPage() {
           <Card.Description>Jump into the workflows you use most</Card.Description>
         </Card.Header>
         <Card.Content className="grid grid-cols-1 gap-3 sm:grid-cols-2 xl:grid-cols-4">
-          <LinkButton variant="secondary" className="justify-start" href="/dashboard/new">
+          <Button variant="secondary" className="justify-start" onPress={goCreate}>
             <Server className="size-4" />
             Add Server
-          </LinkButton>
-          <LinkButton variant="secondary" className="justify-start" href="/dashboard/new">
+          </Button>
+          <Button variant="secondary" className="justify-start" onPress={goCreate}>
             <Bot className="size-4" />
             Add Bot
-          </LinkButton>
+          </Button>
           <Button variant="secondary" className="justify-start">
             <UserRound className="size-4" />
             Edit Profile
           </Button>
-          <LinkButton variant="secondary" className="justify-start" href="#analytics">
+          <Button
+            variant="secondary"
+            className="justify-start"
+            onPress={() => {
+              document.getElementById("analytics")?.scrollIntoView({ behavior: "smooth" });
+            }}
+          >
             <BarChart3 className="size-4" />
             View Analytics
-          </LinkButton>
+          </Button>
         </Card.Content>
       </Card>
 

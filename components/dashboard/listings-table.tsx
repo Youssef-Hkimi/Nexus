@@ -15,26 +15,33 @@ import {
   Pencil,
   Trash2,
 } from "lucide-react";
-import { useMemo, useState } from "react";
+import { useEffect, useMemo, useState } from "react";
 
 import { DASHBOARD_LISTINGS } from "@/lib/data/dashboard";
 import { formatCount } from "@/lib/format";
-import type { DashboardListing } from "@/lib/types";
+import { mergeListingStatuses } from "@/lib/listing-status";
+import type { DashboardListing, ListingStatus } from "@/lib/types";
 
 const statusColor: Record<
-  DashboardListing["status"],
-  "success" | "warning" | "accent" | "default"
+  ListingStatus,
+  "success" | "warning" | "accent" | "default" | "danger"
 > = {
-  Published: "success",
+  Live: "success",
   Draft: "default",
-  Pending: "warning",
-  Featured: "accent",
+  Paused: "default",
+  "Under Review": "warning",
+  "Live · Pending Review": "warning",
+  Rejected: "danger",
 };
 
 export function ListingsTable() {
   const [rows, setRows] = useState(DASHBOARD_LISTINGS);
   const [preview, setPreview] = useState<DashboardListing | null>(null);
   const [toDelete, setToDelete] = useState<DashboardListing | null>(null);
+
+  useEffect(() => {
+    setRows(mergeListingStatuses(DASHBOARD_LISTINGS));
+  }, []);
 
   const servers = useMemo(() => rows.filter((r) => r.type === "server"), [rows]);
   const bots = useMemo(() => rows.filter((r) => r.type === "bot"), [rows]);
@@ -73,7 +80,11 @@ export function ListingsTable() {
                       </div>
                     </Table.Cell>
                     <Table.Cell>
-                      <Chip size="sm" variant="soft" color={row.type === "bot" ? "accent" : "default"}>
+                      <Chip
+                        size="sm"
+                        variant="soft"
+                        color={row.type === "bot" ? "accent" : "default"}
+                      >
                         <Chip.Label>{row.type === "bot" ? "Bot" : "Server"}</Chip.Label>
                       </Chip>
                     </Table.Cell>
@@ -106,7 +117,6 @@ export function ListingsTable() {
                           <Eye className="size-4" />
                         </Button>
                         <Dropdown>
-                          {/* Dropdown.Trigger already renders a <button> — do not nest Button */}
                           <Dropdown.Trigger
                             aria-label="More actions"
                             className="button button--ghost button--sm button--icon-only"

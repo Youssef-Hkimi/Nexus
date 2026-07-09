@@ -1,18 +1,23 @@
 "use client";
 
-import { Button, Drawer, SearchField, toast } from "@heroui/react";
+import { Avatar, Button, Drawer, Dropdown, SearchField, toast } from "@heroui/react";
 import {
   LayoutDashboard,
+  LogOut,
   Menu,
   MessageCircle,
+  PlusCircle,
   Search,
   Sparkles,
+  UserRound,
 } from "lucide-react";
 import Link from "next/link";
-import { usePathname } from "next/navigation";
+import { usePathname, useRouter } from "next/navigation";
 import { useState } from "react";
 
 import { ThemeToggle } from "@/components/layout/theme-toggle";
+import { useAuth } from "@/lib/auth/auth-context";
+import { initials } from "@/lib/format";
 
 const NAV_ITEMS = [
   { href: "/explore", label: "Explore", match: (p: string) => p.startsWith("/explore") },
@@ -27,7 +32,17 @@ const NAV_ITEMS = [
 
 export function SiteNavbar() {
   const pathname = usePathname();
+  const router = useRouter();
   const [mobileOpen, setMobileOpen] = useState(false);
+  const { user, isAuthenticated, requireAuth, logout, setLoginModalOpen } = useAuth();
+
+  function goDashboard() {
+    requireAuth(() => router.push("/dashboard"));
+  }
+
+  function goCreateListing() {
+    requireAuth(() => router.push("/dashboard/new"));
+  }
 
   return (
     <header className="navbar-shell sticky top-0 z-50 border-b border-border/80 bg-background/80 backdrop-blur-xl">
@@ -42,6 +57,18 @@ export function SiteNavbar() {
         <nav className="ml-4 hidden items-center gap-5 lg:flex">
           {NAV_ITEMS.map((item) => {
             const active = item.match(pathname);
+            if (item.href === "/dashboard") {
+              return (
+                <button
+                  key={item.label}
+                  type="button"
+                  onClick={goDashboard}
+                  className={`nav-link ${active ? "nav-link-active" : ""}`}
+                >
+                  {item.label}
+                </button>
+              );
+            }
             return (
               <Link
                 key={item.label}
@@ -67,18 +94,54 @@ export function SiteNavbar() {
 
           <ThemeToggle />
 
-          <Button
-            className="hidden sm:inline-flex"
-            onPress={() =>
-              toast("Login with Discord", {
-                description: "OAuth flow is mocked in this demo.",
-                variant: "accent",
-              })
-            }
-          >
-            <MessageCircle className="size-4" />
-            Login with Discord
-          </Button>
+          {isAuthenticated && user ? (
+            <Dropdown>
+              <Dropdown.Trigger
+                aria-label="Account menu"
+                className="hidden items-center gap-2 rounded-full border border-border bg-default/50 py-1 pr-2.5 pl-1 sm:inline-flex"
+              >
+                <Avatar className="size-8">
+                  <Avatar.Fallback className="bg-accent/20 text-xs font-bold text-accent">
+                    {initials(user.username)}
+                  </Avatar.Fallback>
+                </Avatar>
+                <span className="max-w-[7rem] truncate text-sm font-medium text-foreground">
+                  {user.username}
+                </span>
+              </Dropdown.Trigger>
+              <Dropdown.Popover placement="bottom end">
+                <Dropdown.Menu
+                  onAction={(key) => {
+                    if (key === "dashboard") router.push("/dashboard");
+                    if (key === "create") router.push("/dashboard/new");
+                    if (key === "logout") {
+                      logout();
+                      toast.success("Signed out");
+                      if (pathname.startsWith("/dashboard")) router.push("/explore");
+                    }
+                  }}
+                >
+                  <Dropdown.Item id="dashboard" textValue="Dashboard">
+                    <LayoutDashboard className="size-4" />
+                    Dashboard
+                  </Dropdown.Item>
+                  <Dropdown.Item id="create" textValue="Create listing">
+                    <PlusCircle className="size-4" />
+                    Create listing
+                  </Dropdown.Item>
+                  <Dropdown.Item id="logout" textValue="Log out" variant="danger">
+                    <LogOut className="size-4" />
+                    Log out
+                  </Dropdown.Item>
+                </Dropdown.Menu>
+              </Dropdown.Popover>
+            </Dropdown>
+          ) : (
+            <Button className="hidden sm:inline-flex" onPress={() => setLoginModalOpen(true)}>
+              <MessageCircle className="size-4" />
+              Login with Discord
+            </Button>
+          )}
 
           <Button
             isIconOnly
@@ -111,11 +174,15 @@ export function SiteNavbar() {
                 {NAV_ITEMS.map((item) => {
                   const active = item.match(pathname);
                   return (
-                    <Link
+                    <button
                       key={item.label}
-                      href={item.href}
-                      onClick={() => setMobileOpen(false)}
-                      className={`flex items-center gap-2 rounded-xl px-3 py-2.5 text-sm font-medium transition-colors duration-200 ${
+                      type="button"
+                      onClick={() => {
+                        setMobileOpen(false);
+                        if (item.href === "/dashboard") goDashboard();
+                        else router.push(item.href);
+                      }}
+                      className={`flex items-center gap-2 rounded-xl px-3 py-2.5 text-left text-sm font-medium transition-colors duration-200 ${
                         active
                           ? "bg-accent/15 text-accent"
                           : "text-foreground hover:bg-default"
@@ -124,22 +191,53 @@ export function SiteNavbar() {
                       {item.label === "Dashboard" ? <LayoutDashboard className="size-4" /> : null}
                       {item.label === "Explore" ? <Search className="size-4" /> : null}
                       {item.label}
-                    </Link>
+                    </button>
                   );
                 })}
-                <Button
-                  className="mt-3 w-full"
-                  onPress={() => {
-                    setMobileOpen(false);
-                    toast("Login with Discord", {
-                      description: "OAuth flow is mocked in this demo.",
-                      variant: "accent",
-                    });
-                  }}
-                >
-                  <MessageCircle className="size-4" />
-                  Login with Discord
-                </Button>
+
+                {isAuthenticated && user ? (
+                  <>
+                    <div className="mt-3 flex items-center gap-2 rounded-xl border border-border px-3 py-2.5">
+                      <UserRound className="size-4 text-accent" />
+                      <span className="text-sm font-medium">{user.username}</span>
+                    </div>
+                    <Button
+                      className="mt-2 w-full"
+                      variant="secondary"
+                      onPress={() => {
+                        setMobileOpen(false);
+                        goCreateListing();
+                      }}
+                    >
+                      <PlusCircle className="size-4" />
+                      Create listing
+                    </Button>
+                    <Button
+                      className="w-full"
+                      variant="danger"
+                      onPress={() => {
+                        setMobileOpen(false);
+                        logout();
+                        toast.success("Signed out");
+                        router.push("/explore");
+                      }}
+                    >
+                      <LogOut className="size-4" />
+                      Log out
+                    </Button>
+                  </>
+                ) : (
+                  <Button
+                    className="mt-3 w-full"
+                    onPress={() => {
+                      setMobileOpen(false);
+                      setLoginModalOpen(true);
+                    }}
+                  >
+                    <MessageCircle className="size-4" />
+                    Login with Discord
+                  </Button>
+                )}
               </Drawer.Body>
             </Drawer.Dialog>
           </Drawer.Content>

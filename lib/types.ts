@@ -81,7 +81,47 @@ export type BotListing = {
 };
 
 export type ListingType = "server" | "bot";
-export type ListingStatus = "Published" | "Draft" | "Pending" | "Featured";
+
+/** Unified dashboard status labels (servers + bots). */
+export type ListingStatus =
+  | "Live"
+  | "Draft"
+  | "Paused"
+  | "Under Review"
+  | "Live · Pending Review"
+  | "Rejected";
+
+export type BotCommand = {
+  id: string;
+  name: string;
+  description: string;
+};
+
+export type AuthUser = {
+  username: string;
+  avatarUrl: string | null;
+  discordId: string;
+};
+
+export type DiscordServerRole = "Owner" | "Admin" | "Manage Server";
+
+export type DiscordServer = {
+  id: string;
+  name: string;
+  members: number;
+  online: number;
+  role: DiscordServerRole;
+  category: string;
+  tags: string[];
+  shortDescription: string;
+  fullDescription: string;
+  language: string;
+  region: string;
+  inviteUrl: string;
+  bannerHue: string;
+  verified: boolean;
+  createdAt: string;
+};
 
 export type DashboardListing = {
   id: string;

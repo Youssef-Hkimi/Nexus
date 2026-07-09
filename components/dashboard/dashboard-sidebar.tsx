@@ -12,6 +12,8 @@ import {
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 
+import { useAuth } from "@/lib/auth/auth-context";
+
 const ITEMS = [
   { href: "/dashboard", label: "Overview", icon: LayoutDashboard, exact: true },
   { href: "/dashboard#servers", label: "My Servers", icon: Server },
@@ -24,12 +26,14 @@ const ITEMS = [
 
 export function DashboardNav() {
   const pathname = usePathname();
+  const { user } = useAuth();
+  const studioName = user ? `${user.username}'s Studio` : "Creator Studio";
 
   return (
     <aside className="nexus-card sticky top-24 h-fit space-y-1 rounded-2xl p-3">
       <div className="mb-3 px-2 py-2">
         <p className="text-xs font-semibold tracking-wide text-muted uppercase">Workspace</p>
-        <p className="mt-1 text-sm font-semibold text-foreground">Alex&apos;s Studio</p>
+        <p className="mt-1 text-sm font-semibold text-foreground">{studioName}</p>
       </div>
       {ITEMS.map((item) => {
         const Icon = item.icon;
