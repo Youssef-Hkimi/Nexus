@@ -1,0 +1,127 @@
+import type { ActivityItem, ChartPoint, DashboardListing } from "@/lib/types";
+
+export const DASHBOARD_STATS = [
+  { id: "views", label: "Total Views", value: "124.8K", delta: "+12.4%", tone: "up" as const },
+  { id: "joins", label: "Join Clicks", value: "18.2K", delta: "+8.1%", tone: "up" as const },
+  { id: "invites", label: "Bot Invites", value: "7.4K", delta: "+5.6%", tone: "up" as const },
+  { id: "votes", label: "Votes", value: "42.1K", delta: "+15.2%", tone: "up" as const },
+  { id: "conversion", label: "Conversion Rate", value: "14.6%", delta: "+1.2%", tone: "up" as const },
+];
+
+export const DASHBOARD_LISTINGS: DashboardListing[] = [
+  {
+    id: "lofi-girl",
+    name: "Lofi Girl",
+    type: "server",
+    status: "Featured",
+    views: 48200,
+    clicks: 6200,
+    updated: "2 hours ago",
+    category: "Music",
+    description: "Chill beats and study rooms for the community.",
+    bannerHue: "280",
+  },
+  {
+    id: "reactflux",
+    name: "ReactFlux",
+    type: "server",
+    status: "Published",
+    views: 21400,
+    clicks: 3100,
+    updated: "Yesterday",
+    category: "Tech",
+    description: "React and Next.js builders shipping in public.",
+    bannerHue: "195",
+  },
+  {
+    id: "shield-mod",
+    name: "Shield Mod",
+    type: "bot",
+    status: "Published",
+    views: 33600,
+    clicks: 4800,
+    updated: "3 hours ago",
+    category: "Moderation",
+    description: "Raid protection and trust scoring for safer servers.",
+    bannerHue: "0",
+  },
+  {
+    id: "nexus-hub",
+    name: "Nexus Hub",
+    type: "server",
+    status: "Featured",
+    views: 59100,
+    clicks: 8900,
+    updated: "1 day ago",
+    category: "Social",
+    description: "Official home for Nexus creators and communities.",
+    bannerHue: "220",
+  },
+  {
+    id: "helper-ai",
+    name: "Helper AI",
+    type: "bot",
+    status: "Pending",
+    views: 8200,
+    clicks: 940,
+    updated: "4 days ago",
+    category: "AI",
+    description: "Smart onboarding and FAQ automation.",
+    bannerHue: "185",
+  },
+  {
+    id: "minecraft",
+    name: "Minecraft",
+    type: "server",
+    status: "Draft",
+    views: 1200,
+    clicks: 180,
+    updated: "Just now",
+    category: "Gaming",
+    description: "Survival, builds, and weekly community events.",
+    bannerHue: "145",
+  },
+];
+
+export const RECENT_ACTIVITY: ActivityItem[] = [
+  {
+    id: "1",
+    icon: "clicks",
+    text: "Lofi Girl received 240 new clicks",
+    time: "12 min ago",
+  },
+  {
+    id: "2",
+    icon: "trending",
+    text: "ReactFlux was added to Trending",
+    time: "1 hour ago",
+  },
+  {
+    id: "3",
+    icon: "votes",
+    text: "Shield Mod gained 530 votes",
+    time: "3 hours ago",
+  },
+  {
+    id: "4",
+    icon: "views",
+    text: "Nexus Hub gained 1,200 views",
+    time: "5 hours ago",
+  },
+  {
+    id: "5",
+    icon: "update",
+    text: "Minecraft listing was updated",
+    time: "Yesterday",
+  },
+];
+
+export const PERFORMANCE_SERIES: ChartPoint[] = [
+  { label: "Mon", views: 8200, clicks: 1100 },
+  { label: "Tue", views: 9400, clicks: 1320 },
+  { label: "Wed", views: 10100, clicks: 1480 },
+  { label: "Thu", views: 11800, clicks: 1710 },
+  { label: "Fri", views: 14200, clicks: 2100 },
+  { label: "Sat", views: 16800, clicks: 2450 },
+  { label: "Sun", views: 15600, clicks: 2280 },
+];

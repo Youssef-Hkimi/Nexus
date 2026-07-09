@@ -1,0 +1,397 @@
+@import "tailwindcss";
+@import "@heroui/styles";
+
+/* Nexus brand tokens — light */
+:root {
+  color-scheme: light;
+
+  --page-bg: #ffffff;
+  --nexus-primary: #629bf8;
+  --nexus-secondary: #82b0f9;
+  --nexus-soft: #f5f9ff;
+  --nexus-card: #ffffff;
+  --nexus-elevated: #ffffff;
+  --nexus-border: #e6eef8;
+  --nexus-text: #102033;
+  --nexus-muted: #64748b;
+  --nexus-dark-page: #2d2e33;
+  --nexus-dark-soft: #323339;
+
+  --background: #ffffff;
+  --foreground: #102033;
+  --surface: #ffffff;
+  --surface-foreground: #102033;
+  --surface-secondary: #f5f9ff;
+  --surface-tertiary: #eef4fc;
+  --overlay: #ffffff;
+  --overlay-foreground: #102033;
+  --muted: #64748b;
+  --default: #eef4fc;
+  --default-foreground: #102033;
+  --accent: #629bf8;
+  --accent-foreground: #ffffff;
+  --field-background: #ffffff;
+  --field-foreground: #102033;
+  --field-placeholder: #64748b;
+  --border: #e6eef8;
+  --separator: #e6eef8;
+  --focus: #629bf8;
+  --link: #629bf8;
+  --segment: #ffffff;
+  --segment-foreground: #102033;
+}
+
+/* Soft charcoal dark — not pitch black */
+.dark,
+[data-theme="dark"] {
+  color-scheme: dark;
+
+  --page-bg: #2d2e33;
+  --background: #2d2e33;
+  --foreground: #f8fafc;
+  --surface: #323339;
+  --surface-foreground: #f8fafc;
+  --surface-secondary: #36373d;
+  --surface-tertiary: #3b3c43;
+  --overlay: #36373d;
+  --overlay-foreground: #f8fafc;
+  --muted: #b8bec9;
+  --default: #3b3c43;
+  --default-foreground: #f8fafc;
+  --accent: #629bf8;
+  --accent-foreground: #ffffff;
+  --field-background: #36373d;
+  --field-foreground: #f8fafc;
+  --field-placeholder: #b8bec9;
+  --border: rgba(255, 255, 255, 0.1);
+  --separator: rgba(255, 255, 255, 0.1);
+  --focus: #82b0f9;
+  --link: #82b0f9;
+  --segment: #3b3c43;
+  --segment-foreground: #f8fafc;
+  --surface-shadow: 0 8px 24px rgba(0, 0, 0, 0.22);
+  --overlay-shadow: 0 12px 32px rgba(0, 0, 0, 0.28);
+  --field-shadow: 0 0 0 0 transparent inset;
+}
+
+@theme inline {
+  --color-background: var(--background);
+  --color-foreground: var(--foreground);
+  --color-surface: var(--surface);
+  --color-muted: var(--muted);
+  --color-accent: var(--accent);
+  --color-border: var(--border);
+  --color-nexus-primary: #629bf8;
+  --color-nexus-secondary: #82b0f9;
+  --color-nexus-soft: #f5f9ff;
+  --font-sans: var(--font-geist-sans);
+  --font-mono: var(--font-geist-mono);
+}
+
+/* Smooth theme transitions */
+html {
+  scroll-behavior: smooth;
+}
+
+html,
+body,
+.theme-surface,
+.card,
+.button,
+.chip,
+.input,
+.search-field,
+.select,
+.switch,
+.table-root,
+.navbar-shell {
+  transition-property: background-color, color, border-color, box-shadow, fill, stroke;
+  transition-duration: 600ms;
+  transition-timing-function: ease;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  html {
+    scroll-behavior: auto;
+  }
+
+  html,
+  body,
+  .theme-surface,
+  .card,
+  .button,
+  .chip,
+  .input,
+  .search-field,
+  .select,
+  .switch,
+  .table-root,
+  .navbar-shell,
+  .hover-lift,
+  .hero-artwork {
+    transition: none !important;
+  }
+}
+
+body {
+  background: var(--background);
+  color: var(--foreground);
+  font-family: var(--font-geist-sans), system-ui, sans-serif;
+  min-height: 100vh;
+}
+
+/* Utility surfaces */
+.nexus-soft-bg {
+  background-color: var(--nexus-soft);
+}
+
+.dark .nexus-soft-bg {
+  background-color: var(--nexus-dark-soft);
+}
+
+.nexus-card {
+  background: var(--nexus-card);
+  border: 1px solid var(--nexus-border);
+}
+
+.dark .nexus-card {
+  background: rgba(45, 46, 51, 0.82);
+  border-color: rgba(255, 255, 255, 0.1);
+  backdrop-filter: blur(12px);
+}
+
+.nexus-card-elevated {
+  background: var(--nexus-elevated);
+  border: 1px solid var(--nexus-border);
+}
+
+.dark .nexus-card-elevated {
+  background: rgba(50, 51, 57, 0.92);
+  border-color: rgba(255, 255, 255, 0.1);
+}
+
+.nexus-gradient-text {
+  background: linear-gradient(135deg, #629bf8 0%, #82b0f9 100%);
+  -webkit-background-clip: text;
+  background-clip: text;
+  color: transparent;
+}
+
+.hover-lift {
+  transition:
+    transform 200ms ease,
+    box-shadow 200ms ease,
+    border-color 200ms ease,
+    background-color 600ms ease;
+}
+
+.hover-lift:hover {
+  transform: translateY(-2px);
+  box-shadow:
+    0 10px 28px rgba(98, 155, 248, 0.12),
+    0 2px 8px rgba(16, 32, 51, 0.06);
+}
+
+.dark .hover-lift:hover {
+  box-shadow:
+    0 12px 28px rgba(0, 0, 0, 0.28),
+    0 0 0 1px rgba(98, 155, 248, 0.15);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .hover-lift:hover {
+    transform: none;
+  }
+}
+
+.nav-link {
+  position: relative;
+  color: var(--muted);
+  font-weight: 500;
+  font-size: 0.925rem;
+  padding: 0.4rem 0.15rem;
+  transition:
+    color 200ms ease,
+    background-color 600ms ease;
+}
+
+.nav-link:hover {
+  color: var(--foreground);
+}
+
+.nav-link-active {
+  color: var(--accent);
+}
+
+.nav-link-active::after {
+  content: "";
+  position: absolute;
+  left: 0;
+  right: 0;
+  bottom: -2px;
+  height: 2px;
+  border-radius: 999px;
+  background: linear-gradient(90deg, #629bf8, #82b0f9);
+}
+
+.hero-artwork {
+  transition: opacity 600ms ease;
+}
+
+.hero-fade-mask {
+  mask-image: linear-gradient(to bottom, black 0%, black 55%, transparent 100%);
+  -webkit-mask-image: linear-gradient(to bottom, black 0%, black 55%, transparent 100%);
+}
+
+/* Server detail hero banner — fully sharp, no fog */
+.server-hero-banner {
+  position: relative;
+  isolation: isolate;
+  width: 100%;
+  height: 420px;
+  overflow: hidden;
+  background-color: transparent;
+  background-size: cover;
+  background-position: center;
+  background-repeat: no-repeat;
+  filter: none !important;
+  opacity: 1 !important;
+  backdrop-filter: none !important;
+  -webkit-backdrop-filter: none !important;
+  mask-image: none !important;
+  -webkit-mask-image: none !important;
+  /* prevent theme transition from washing the banner */
+  transition: none !important;
+}
+
+/* Tiny edge fade only — transparent → page bg, no mid white stops */
+.server-hero-banner::before,
+.server-hero-banner::after {
+  backdrop-filter: none !important;
+  -webkit-backdrop-filter: none !important;
+  filter: none !important;
+}
+
+.server-hero-banner::before {
+  content: none;
+}
+
+.server-hero-banner::after {
+  content: "";
+  position: absolute;
+  inset-inline: 0;
+  bottom: 0;
+  height: 56px;
+  max-height: 56px;
+  pointer-events: none;
+  z-index: 1;
+  opacity: 1;
+  background: linear-gradient(
+    to bottom,
+    transparent 0%,
+    var(--page-bg) 100%
+  );
+}
+
+/* Profile lives under the banner (not inside the fade band) */
+.server-hero-profile {
+  position: relative;
+  z-index: 2;
+  margin-top: 0;
+  padding-top: 1.25rem;
+  background: var(--page-bg);
+}
+
+/* Only the avatar peeks onto the banner edge */
+.server-hero-avatar {
+  margin-top: -3.5rem;
+}
+
+@media (min-width: 768px) {
+  .server-hero-avatar {
+    margin-top: -4rem;
+  }
+}
+
+.gradient-banner {
+  background-size: 200% 200%;
+}
+
+/* Server listing cards — wider, slightly less rounded (Explore / Servers) */
+.server-listing-grid {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr);
+  gap: 1.25rem; /* 20px */
+}
+
+@media (min-width: 640px) {
+  .server-listing-grid {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 1.375rem; /* 22px */
+  }
+}
+
+@media (min-width: 1280px) {
+  .server-listing-grid {
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+    gap: 1.5rem; /* 24px */
+  }
+}
+
+.server-listing-card.card,
+.server-listing-card {
+  border-radius: 15px !important;
+  overflow: hidden;
+}
+
+.server-listing-card:hover {
+  border-color: color-mix(in oklab, var(--accent) 35%, var(--border));
+}
+
+.server-listing-banner {
+  border-radius: 13px 13px 0 0;
+  overflow: hidden;
+}
+
+.server-listing-icon,
+.server-listing-icon .avatar,
+.server-listing-icon [data-slot="avatar"],
+.server-listing-icon [data-slot="avatar-fallback"] {
+  border-radius: 13px !important;
+}
+
+.server-listing-shell {
+  width: 100%;
+  max-width: 1600px;
+  margin-inline: auto;
+  padding-inline: 0.75rem; /* tighter side padding for wider cards */
+}
+
+@media (min-width: 768px) {
+  .server-listing-shell {
+    padding-inline: 1rem;
+  }
+}
+
+@media (min-width: 1024px) {
+  .server-listing-shell {
+    padding-inline: 1.25rem;
+  }
+}
+
+.upload-zone {
+  border: 1.5px dashed var(--border);
+  transition:
+    border-color 200ms ease,
+    background-color 200ms ease,
+    transform 200ms ease;
+}
+
+.upload-zone:hover {
+  border-color: var(--accent);
+  background: color-mix(in oklab, var(--accent) 8%, transparent);
+}
+
+.scrollbar-thin {
+  scrollbar-width: thin;
+}
