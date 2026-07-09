@@ -3,14 +3,13 @@
 import { useState } from "react";
 
 import { ServerCard } from "@/components/cards/server-card";
+import { AnimatedTagMarquee } from "@/components/explore/animated-tag-marquee";
 import { ExploreSidebar } from "@/components/explore/explore-sidebar";
 import { HeroSection } from "@/components/explore/hero-section";
-import { CategoryChips } from "@/components/filters/category-chips";
-import { EXPLORE_CATEGORIES } from "@/lib/data/categories";
 import { FEATURED_SERVERS } from "@/lib/data/servers";
 
 export default function ExplorePage() {
-  // Empty string = show all featured; chip selection filters the grid
+  // Empty string = show all featured; tag click filters the grid
   const [category, setCategory] = useState("");
 
   const servers = !category
@@ -18,7 +17,8 @@ export default function ExplorePage() {
     : FEATURED_SERVERS.filter(
         (s) =>
           s.category === category ||
-          s.tags.some((t) => t.toLowerCase() === category.toLowerCase()),
+          s.tags.some((t) => t.toLowerCase() === category.toLowerCase()) ||
+          s.name.toLowerCase().includes(category.toLowerCase()),
       );
 
   return (
@@ -27,11 +27,7 @@ export default function ExplorePage() {
 
       <div className="server-listing-shell pb-16">
         <div className="mb-8">
-          <CategoryChips
-            items={EXPLORE_CATEGORIES}
-            active={category}
-            onChange={setCategory}
-          />
+          <AnimatedTagMarquee activeTag={category} onTagClick={setCategory} />
         </div>
 
         <div className="grid grid-cols-1 gap-8 xl:grid-cols-[minmax(0,1fr)_300px]">
